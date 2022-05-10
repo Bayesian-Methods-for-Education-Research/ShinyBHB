@@ -1,0 +1,46 @@
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.inline label {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.inline .form-group {
+  display: table-row;
+}
+
+.param .inline .selectize-control {
+  width: 270px !important;
+}
+
+.inline .selectize-control {
+  width: 170px;
+}
+
+.inline label {
+  padding-right: 5px;
+}
+
+input[type = number] {
+  -moz-appearance: textfield;
+  text-align: center;
+  width: 90px;
+}
+
+input[type = number]::-webkit-inner-spin-button, 
+input[type = number]::-webkit-outer-spin-button {
+  -webkit-appearance: none !important;
+}
+
+#waic {
+  display: inline-block;
+  vertical-align: top;
+}
+
+#fit {
+  overflow: auto;
+}
