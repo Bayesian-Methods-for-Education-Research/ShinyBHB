@@ -1,4 +1,4 @@
-# BDB
+# Please follow the instructions to start the Shiny App. You will find the tutorial video for the app [here](https://github.com/user/repo/blob/branch/other_file.md) and under the tutorial tab on the Shiny App.
 
 ### 1) Click the green Code button
 ![alt text](https://github.com/Bayesian-Methods-for-Education-Research/BDB_shinyApp/blob/main/figures/Code.png)
