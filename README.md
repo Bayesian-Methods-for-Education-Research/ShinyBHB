@@ -14,5 +14,5 @@
 ### 5) Click on the Run App button
 ![alt text](https://github.com/Bayesian-Methods-for-Education-Research/BDB_shinyApp/blob/main/figures/RunApp.png)
 
-### 6) It will pup up the Shiny App
+### 6) It will pop up the Shiny App
 ![alt text](https://github.com/Bayesian-Methods-for-Education-Research/BDB_shinyApp/blob/main/figures/ShinyApp.png)
