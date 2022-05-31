@@ -590,7 +590,7 @@ observeEvent(c(input$long, input$t1, input$td1, input$tf1, input$y1, input$x1, i
                         div(
                             div(style="display:inline-block", class="hyperprior_label", inline(selectizeInput(paste0('dist_', component), paste0("$", label, "\\sim$"), mapping, options = katex, width = "600px"))),
                             div(style="display:inline-block", class="hyperprior_input", numericInput(inputId=paste0(component, "_a"), label="$a$", value = 0.0, width = "30%")),
-                            div(style="display:inline-block", class="hyperprior_input", numericInput(inputId=paste0(component, "_b"), label="$b$", value = 10, width = "30%"))
+                            div(style="display:inline-block", class="hyperprior_input", numericInput(inputId=paste0(component, "_b"), label="$b$", value = 3, width = "30%"))
                         )
                     },
 
@@ -644,7 +644,7 @@ observeEvent(c(input$long, input$t1, input$td1, input$tf1, input$y1, input$x1, i
                                         bsTooltip(id = paste0(component, "_a"), title = hyperprior$help_text_a[[input[[paste0('dist_', component)]]]], placement = "bottom", trigger = "hover", options = NULL)
                                     )
                                 },
-                                div(style="display:inline-block", class="hyperprior_input", numericInput(inputId=paste0(component, "_b"), label=paste0("$", hyperprior[[paste0(component, "_b")]][input[[paste0('dist_', component)]]], "$"), value = 10, width = "100px")),
+                                div(style="display:inline-block", class="hyperprior_input", numericInput(inputId=paste0(component, "_b"), label=paste0("$", hyperprior[[paste0(component, "_b")]][input[[paste0('dist_', component)]]], "$"), value = 3, width = "100px")),
                                 bsTooltip(id = paste0(component, "_b"), title = hyperprior$help_text_b[[input[[paste0('dist_', component)]]]], placement = "bottom", trigger = "hover", options = NULL)
                             )
                         },
