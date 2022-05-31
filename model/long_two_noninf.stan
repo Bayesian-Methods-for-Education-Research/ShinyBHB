@@ -31,7 +31,7 @@ transformed data {
   
   real mu_y = mean(y[1:SS]);
   real sd_y = sd(y[1:SS]);
-  vector[S] y_std = (y[1:SS] - mu_y) / sd_y;
+  vector[SS] y_std = (y[1:SS] - mu_y) / sd_y;
   
   x_std[1, ] = to_row_vector(x[1:SS, 1]);
   for (k in 2:K) {
@@ -119,7 +119,7 @@ generated quantities {
   for (i in 2:K2) {
     Sigma_v[1, i] /= sd_x2[i];
     Sigma_v[1, 1] -= 2 * mu_x2[i] * Sigma_v[1, i];
-    for (j in 2:KK2) {
+    for (j in 2:K2) {
       Sigma_v[i, j] /= sd_x2[i] * sd_x2[j];
       Sigma_v[1, i] -= Sigma_v[i, j] * mu_x2[j];
       Sigma_v[1, 1] += mu_x2[i] * mu_x2[j] * Sigma_v[i, j];

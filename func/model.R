@@ -636,7 +636,7 @@ observeEvent(c(input$long, input$t1, input$td1, input$tf1, input$y1, input$x1, i
                             "$$"
                         }
                         else {
-                            div( title="Click here to slide through years",
+                            div(
                                 div(style="display:inline-block;", class="hyperprior_label", selectizeInput(paste0('dist_', component), paste0("$", label, ending, "\\sim$"), selected = input[[paste0('dist_', component)]], hyperprior_component_new, options = katex, width = "300px")),
                                 if (hyperprior[[paste0(component, "_a")]][input[[paste0('dist_', component)]]] != "0") {
                                     div(style="display:inline-block",

@@ -1,20 +1,18 @@
-# Please follow the instructions to start ShinyBHB App 
+# BDB
+## Introduction
+Some major files:
 
-### 1) Click the green "Code" button
-![alt text](https://github.com/Bayesian-Methods-for-Education-Research/BDB_shinyApp/blob/main/figures/Code.png)
+```ui.R``` clarifies the basic layout of the app, including the tabs and items inside every page.
 
-### 2) Choose "Download ZIP"
-![alt text](https://github.com/Bayesian-Methods-for-Education-Research/BDB_shinyApp/blob/main/figures/DowloandZip.png)
+```server.R``` includes the algorithms of BDB and other borrowing methods, and the process of taking inputs and running data.
 
-### 3) After the download is completed unzip the file to a selected destination
+```global.R``` defines global variables and packages.
 
-### 4) Open the "server.R" file on `RStudio`.
-![alt text](https://github.com/Bayesian-Methods-for-Education-Research/BDB_shinyApp/blob/main/figures/Server.png)
+```data.R```, ```model.R```, ```diagnostics.R```, ```result.R``` respectively builds  ```Data```, ```Estimation```, ```Diagnostics```, ```Result``` tabs in the front-end system. In detail,<br />
+```data.R``` handles input and specifies the general type of data;<br />
+```model.R``` askes users to customize the model;<br />
+```diagnostics.R``` gives basic metrics and show diagnostic plots;<br />
+```Result``` presents an overview of the result.
 
-### 5) Click on the "Run App" button
-![alt text](https://github.com/Bayesian-Methods-for-Education-Research/BDB_shinyApp/blob/main/figures/RunApp.png)
-
-### 6) It will pop up ShinyBHB
-![alt text](https://github.com/Bayesian-Methods-for-Education-Research/BDB_shinyApp/blob/main/figures/ShinyApp.png)
-
-### 7) You will find the tutorial video for running ShinyBHB [here](https://youtube.com) and under the tutorial tab.
+## Configuration
+Download sample data [here](www.google.com)

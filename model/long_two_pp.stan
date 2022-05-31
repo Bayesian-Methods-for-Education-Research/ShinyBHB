@@ -5,7 +5,7 @@ data {
   int<lower = 1> NN;                     // number of students in the current cycle
   int<lower = 1> M;                      // number of schools
   int<lower = 1> MM;                     // number of schools in the current cycle
-  //int<lower = 1> C;                      // number of cycles
+  int<lower = 1> C;                      // number of cycles
   int<lower = 1> K;                      // number of covariates
   int<lower = 1> K1;                     // number of covariates with random effects at student level
   int<lower = 1> K2;                     // number of covariates with random effects at school level
@@ -15,7 +15,8 @@ data {
   vector[S] y;                           // dependent variables
   int<lower = 1, upper = N> id[S];       // student id
   int<lower = 1, upper = M> sid[N];      // school id
-  //int<lower = 1, upper = C> cycle[M];    // cycle id
+  int<lower = 1, upper = C> cycle[M];    // cycle id
+  vector[C] a;
 }
 
 transformed data {
@@ -87,9 +88,9 @@ model {
   tau_v_std ~ TAU2;
   
   for (s in 1:S) {
-    y_std[s] ~ normal(dot_product(x_std[, s], beta_std) +
-                      dot_product(x1_std[, s], u_std[id[s]]) +
-                      dot_product(x2_std[, s], v_std[sid[id[s]]]), sigma_r_std);
+    target += a[cycle[sid[id[s]]]] * normal_lpdf(y_std[s] | dot_product(x_std[, s], beta_std) +
+                                                            dot_product(x1_std[, s], u_std[id[s]]) +
+                                                            dot_product(x2_std[, s], v_std[sid[id[s]]]), sigma_r_std);
   }
   sigma_r_std ~ SIGMA_R;
 }
@@ -119,7 +120,7 @@ generated quantities {
   for (i in 2:K2) {
     Sigma_v[1, i] /= sd_x2[i];
     Sigma_v[1, 1] -= 2 * mu_x2[i] * Sigma_v[1, i];
-    for (j in 2:KK2) {
+    for (j in 2:K2) {
       Sigma_v[i, j] /= sd_x2[i] * sd_x2[j];
       Sigma_v[1, i] -= Sigma_v[i, j] * mu_x2[j];
       Sigma_v[1, 1] += mu_x2[i] * mu_x2[j] * Sigma_v[i, j];

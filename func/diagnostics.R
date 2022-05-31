@@ -238,7 +238,15 @@ observeEvent(c(input$long, input$t1, input$td1, input$tf1, input$y1, input$x1, i
 
 
 
-
+getLatex <- function (row_name) {
+  for (t in names(info$var)) {
+    if (info$var[[t]] == row_name) {
+      res = t
+      break
+    }
+  }
+  substr(res, 2, 1000000L)
+}
 
 observeEvent(info$var, {
   updateSelectizeInput(session, 'param', choices = null, selected = null)
@@ -294,8 +302,8 @@ observeEvent(c(input$param), {
 })
 
 
-plotDens = function() {
-  stan_dens(fit(), row()) + xlab("testx") + ylab("testy") + 
+plotDens = function(cur_row, param_name) {
+  stan_dens(fit(), cur_row) + xlab(TeX(paste0("$\\", param_name, "$"))) + ylab("Density") + 
     theme(axis.text.x = element_text(size = 15), axis.text.y = element_text(size = 15))
 }
 output$dens <- renderPlot({
@@ -304,62 +312,129 @@ output$dens <- renderPlot({
   # fit_tmp <- fit()
   # names(fit_tmp) <- paste("$\\", names(fit_tmp), "$", sep="")
   # row_tmp <- paste("$\\", row(), "$", sep="")
-  plotDens()
+  plotDens(row(), getLatex(input$param))
 })
 output$export_dens <- downloadHandler(
   filename = function() {
-    paste("data-", Sys.Date(), ".png", sep="")
+    paste("data-", Sys.Date(), ".zip", sep="")
   },
   content = function(file) {
-    device <- function(..., width, height) {
-      grDevices::png(..., width = width, height = height,
-                     res = 300, units = "in")
+    fs <- c()
+    curdir <- getwd()
+    tmpdir <- tempdir()
+    setwd(tempdir())
+    
+    for (i in names(info$var)) {
+      device <- function(..., width, height) {
+        grDevices::png(..., width = width, height = height,
+                       res = 300, units = "in")
+      }
+      path <- paste0("dens_", substr(i, 2, 100000L), ".png")
+      fs <- c(fs, path)
+      
+      cur_row <- unique(do.call(c, lapply(var, function(var) {
+        grep(paste(paste0('(^', info$var[[i]], '$)'), collapse = '|'), rownames(info$est), value = T)
+      })))
+      ggsave(path, plot = plotDens(cur_row, substr(i, 2, 100000L)), device = device)
     }
-    ggsave(file, plot = plotDens(), device = device)
-  }
+    
+    res = zip(zipfile=file, files=fs)
+    setwd(curdir)
+    res
+  },
+  contentType = "application/zip"
 )
 
-plotTrace = function() {
-  stan_trace(fit(), row()) + xlab("testx") + ylab("testy") + 
-    theme(text = element_text(size = 20), legend.title = element_blank(), axis.text.y = element_blank())
+plotTrace = function(cur_row, param_name) {
+  stan_trace(fit(), cur_row) + xlab("Iteration") + ylab(TeX(paste0("$\\", param_name, "$"))) + 
+    theme(text = element_text(size = 20), legend.title = element_text(size = 20), axis.text.y = element_text(size = 20))
 }
 output$trace <- renderPlot({
   req(input$param)
   req(length(row()) > 0)
-  plotTrace()
+  plotTrace(row(), getLatex(input$param))
 })
 output$export_trace <- downloadHandler(
   filename = function() {
-    paste("data-", Sys.Date(), ".png", sep="")
+    paste("data-", Sys.Date(), ".zip", sep="")
   },
   content = function(file) {
-    device <- function(..., width, height) {
-      grDevices::png(..., width = width, height = height,
-                     res = 300, units = "in")
+    fs <- c()
+    curdir <- getwd()
+    tmpdir <- tempdir()
+    setwd(tempdir())
+    
+    for (i in names(info$var)) {
+      device <- function(..., width, height) {
+        grDevices::png(..., width = width, height = height,
+                       res = 300, units = "in")
+      }
+      path <- paste0("trace_", substr(i, 2, 100000L), ".png")
+      fs <- c(fs, path)
+      
+      cur_row <- unique(do.call(c, lapply(var, function(var) {
+        grep(paste(paste0('(^', info$var[[i]], '$)'), collapse = '|'), rownames(info$est), value = T)
+      })))
+      ggsave(path, plot = plotTrace(cur_row, substr(i, 2, 100000L)), device = device)
     }
-    ggsave(file, plot = plotTrace(), device = device)
-  }
+    
+    res = zip(zipfile=file, files=fs)
+    setwd(curdir)
+    res
+  },
+  contentType = "application/zip"
 )
 
-plotAc = function() {
-  stan_ac(fit(), row()) + xlab("testx") + ylab("Avg. autocorrelation") +
+plotAc = function(cur_row) {
+  stan_ac(fit(), cur_row) + xlab("Lag") + ylab("Autocorrelation") +
     theme(text = element_text(size = 20), legend.title = element_text(size = 16))
 }
 output$ac <- renderPlot({
   req(input$param)
   req(length(row()) > 0)
-  plotAc()
+  plotAc(row())
 })
 output$export_ac <- downloadHandler(
   filename = function() {
-    paste("data-", Sys.Date(), ".png", sep="")
+    paste("data-", Sys.Date(), ".zip", sep="")
   },
   content = function(file) {
-    device <- function(..., width, height) {
-      grDevices::png(..., width = width, height = height,
-                     res = 300, units = "in")
+    fs <- c()
+    curdir <- getwd()
+    tmpdir <- tempdir()
+    setwd(tempdir())
+
+    for (i in names(info$var)) {
+      device <- function(..., width, height) {
+        grDevices::png(..., width = width, height = height,
+                       res = 300, units = "in")
+      }
+      path <- paste0("ac_", substr(i, 2, 100000L), ".png")
+      fs <- c(fs, path)
+      
+      cur_row <- unique(do.call(c, lapply(var, function(var) {
+        grep(paste(paste0('(^', info$var[[i]], '$)'), collapse = '|'), rownames(info$est), value = T)
+      })))
+      ggsave(path, plot = plotAc(cur_row), device = device)
     }
-    ggsave(file, plot = plotAc(), device = device)
-  }
+
+    res = zip(zipfile=file, files=fs)
+    setwd(curdir)
+    res
+  },
+  contentType = "application/zip"
 )
+
+# output$export_ac <- downloadHandler(
+#   filename = function() {
+#     paste("data-", Sys.Date(), ".png", sep="")
+#   },
+#   content = function(file) {
+#     device <- function(..., width, height) {
+#       grDevices::png(..., width = width, height = height,
+#                      res = 300, units = "in")
+#     }
+#     ggsave(file, plot = plotAc(), device = device)
+#   }
+# )
 

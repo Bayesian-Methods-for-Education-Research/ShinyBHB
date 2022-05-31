@@ -101,7 +101,7 @@ observeEvent(input$add_2, {
             
             selectizeInput('g2', 'Group ID:', NULL, options = katex.tt),
             if (input$long){
-                selectizeInput('x2', 'Group Level Independent Variable:', NULL, multiple = T, options = katex.tt)
+                selectizeInput('x2', 'Group-level Time-Invariant Variable:', NULL, multiple = T, options = katex.tt)
             }
             else {
                 selectizeInput('x2', 'Level-2 Independent Variable:', NULL, multiple = T, options = katex.tt)
@@ -114,7 +114,7 @@ observeEvent(input$add_2, {
         selector = "#add_2",
     )
     if (input$long){
-        updateSelectInput(session, "x1", label = 'Independent Variable:')
+        updateSelectInput(session, "x1", label = 'Individual-Level Time-Invariant Variable:')
     }
     else {
         updateSelectInput(session, "x1", label = 'Level-1 Independent Variable:')
@@ -180,7 +180,13 @@ observeEvent(input$delete_2, {
         selector = "#level-2",
     )
     
-    updateSelectInput(session, "x1", label = 'Independent Variable:')
+    if (input$long){
+        updateSelectInput(session, "x1", label = 'Time-Invariant Variable:')
+    }
+    else {
+        updateSelectInput(session, "x1", label = 'Independent Variable:')
+    }
+    
     removeUI(
         selector = "#looic-2",
     )
@@ -240,8 +246,12 @@ observeEvent(input$long, {
             ),
             immediate = TRUE
         )
-        updateSelectInput(session, "x1", label = 'Independent Variable:')
-        updateSelectInput(session, "x2", label = 'Group Level Independent Variable:')
+        if (layer() == 'two') {
+            updateSelectInput(session, "x1", label = 'Individual-level Time-Invariant Variable:')
+        } else {
+            updateSelectInput(session, "x1", label = 'Time-Invariant Variable:')
+        }
+        updateSelectInput(session, "x2", label = 'Group-level Time-Invariant Variable:')
         
         removeUI(
             selector = "#longitudinal_time",

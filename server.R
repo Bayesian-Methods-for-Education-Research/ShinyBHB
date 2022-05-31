@@ -80,16 +80,16 @@ shinyServer(function(input, output, session) {
         )
     }
     
-    source('data.R', local = T)
-    source('model.R', local = T)
-    source('diagnostics.R', local = T)
-    source('result.R', local = T)
+    source('func/data.R', local = T)
+    source('func/model.R', local = T)
+    source('func/diagnostics.R', local = T)
+    source('func/result.R', local = T)
     
     insertUI(
         selector = "#core-label",
         where = "afterEnd",
         ui = inline(
-            HTML(paste0("<div class='core' data-tooltip='", parallel::detectCores(), " is the number of cores your system has. We recommend specifying the number of cores to be the same as the number of chains.", "' style='display: inline;'>  <i class='fas fa-question-circle'></i></div>"))
+            HTML(paste0("<div class='core' data-tooltip='", parallel::detectCores(), " is the number of cores your system has. We recommend specifying the number of cores to be the same as the number of chains.", "' style='display: inline;'>  <i class='fas fa-info-circle'></i></div>"))
         )
     )
     
@@ -363,7 +363,7 @@ shinyServer(function(input, output, session) {
                             a = c(1, rep(input$pp_weight, C - 1)),
                             id = stu, sid = sid, cycle = cycle.sch)
                 
-                model.str <- read_file(paste0('long_two_', model_mode(), '.stan')) %>%
+                model.str <- read_file(paste0('model/long_two_', model_mode(), '.stan')) %>%
                     str_replace('SIGMA_BETA_STD', getExpression('sigma_beta_std')) %>%
                     str_replace('SIGMA_BETA', getExpression('sigma_beta')) %>%
                     str_replace('SIGMA_0_BETA', getExpression('sigma_0_beta')) %>%
@@ -409,7 +409,7 @@ shinyServer(function(input, output, session) {
                             sch = sch, cycle = cycle, cycle_sch = cycle.sch,
                             nu1 = 0.001, nu2 = 0.001, nu = 10)
 
-                model.str <- read_file(paste0('two_', model_mode(), '.stan')) %>%
+                model.str <- read_file(paste0('model/two_', model_mode(), '.stan')) %>%
                     str_replace('SIGMA_BETA_STD', getExpression('sigma_beta_std')) %>%
                     str_replace('SIGMA_BETA', getExpression('sigma_beta')) %>%
                     str_replace('SIGMA_0_BETA', getExpression('sigma_0_beta')) %>%
@@ -454,7 +454,7 @@ shinyServer(function(input, output, session) {
                             a = c(1, rep(input$pp_weight, C - 1)),
                             id = stu, cycle = cycle.stu)
 
-                model.str <- read_file(paste0('long_one_', model_mode(), '.stan')) %>%
+                model.str <- read_file(paste0('model/long_one_', model_mode(), '.stan')) %>%
                     str_replace('SIGMA_BETA_STD', getExpression('sigma_beta_std')) %>%
                     str_replace('SIGMA_BETA', getExpression('sigma_beta')) %>%
                     str_replace('SIGMA_0_BETA', getExpression('sigma_0_beta')) %>%
@@ -472,7 +472,7 @@ shinyServer(function(input, output, session) {
                             x = data.fe, y = data[[input$y1]], cycle = cycle,
                             a = c(1, rep(input$pp_weight, C - 1)))
 
-                model.str <- read_file(paste0('one_', model_mode(), '.stan')) %>%
+                model.str <- read_file(paste0('model/one_', model_mode(), '.stan')) %>%
                     str_replace('SIGMA_BETA_STD', getExpression('sigma_beta_std')) %>%
                     str_replace('SIGMA_BETA', getExpression('sigma_beta')) %>%
                     str_replace('SIGMA_0_BETA', getExpression('sigma_0_beta')) %>%
@@ -484,15 +484,18 @@ shinyServer(function(input, output, session) {
         #cat(model.str)
         #saveRDS(dat, 'test.rds')
         #cat(model.str)
-        
-        runjs('document.getElementById("fit").innerHTML += "Sampling...\\n";')
+        #saveRDS(dat, 'dat.rds')
+        #writeLines(model.str, 'model.stan')
 
         # unlink(".txt")
         # tfile <- tempfile(fileext = ".txt")
         
+        runjs('document.getElementById("fit").innerHTML += "Sampling...\\n";')
+        
         r$bg_process <- callr::r_bg(
             func = function(model.str, dat, chain, warmup, iter, core, thin) {
                 stan.model <- rstan::stan_model(model_code = model.str)
+                
                 rstan::sampling(stan.model, dat, chains = chain, warmup = warmup, iter = iter, cores = core, thin = thin)
             },
             args = list(model.str = model.str, dat = dat, chain = chain, warmup = warmup, iter = iter, core = core, thin = thin),

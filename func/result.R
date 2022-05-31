@@ -173,8 +173,8 @@ observeEvent(c(info$est, info$var), {
     output$table <- renderDT({
         req(length(row_all()) > 0)
         dat_table_ = isolate(dat_table())
-        colnames(dat_table_)[colnames(dat_table_) == "n_eff"] <- paste0("n_eff<div class='n_eff' data-tooltip='", description['n_eff'], "' style='display: inline'>  <i class='fas fa-question-circle'></i></div>")
-        colnames(dat_table_)[colnames(dat_table_) == "Rhat"] <- paste0('Rhat<div class="Rhat" data-tooltip="', description['Rhat'], '" style="display: inline">  <i class="fas fa-question-circle"></i></div>')
+        colnames(dat_table_)[colnames(dat_table_) == "n_eff"] <- paste0("n_eff<div class='n_eff' data-tooltip='", description['n_eff'], "' style='display: inline'>  <i class='fas fa-info-circle'></i></div>")
+        colnames(dat_table_)[colnames(dat_table_) == "Rhat"] <- paste0('Rhat<div class="Rhat" data-tooltip="', description['Rhat'], '" style="display: inline">  <i class="fas fa-info-circle"></i></div>')
         
         rownames(dat_table_) = paste('<div id="', rownames(dat_table_), '">$\\', rownames(dat_table_), '$</div> <script>renderMathInElement(document.getElementById("', rownames(dat_table_), '"), {delimiters: [{left: "$", right: "$", display: false}]});</script>', sep='')
         print(dat_table_)

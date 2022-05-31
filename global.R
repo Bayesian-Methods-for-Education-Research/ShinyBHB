@@ -1,5 +1,5 @@
 lib <- c('shinyjs', 'shinythemes', 'DT', 'magrittr', 'tools', 'haven', 'htmltools',
-         'openxlsx', 'readr', 'shinyBS', 'rstan', 'loo', 'dplyr', 'stringr')
+         'openxlsx', 'readr', 'shinyBS', 'rstan', 'loo', 'dplyr', 'stringr', 'latex2exp')
 for (pkg in lib)
     if (!require(pkg, character.only = T)) { # if the pkg is not found
         install.packages(pkg)
@@ -246,7 +246,9 @@ hyperprior <- list(
 description <- list(
   n_eff = "The amount by which autocorrelation within the chains increases uncertainty in estimates can be measured by effective sample size (ESS). Given independent samples, the central limit theorem bounds uncertainty in estimates based on the number of samples N. Given dependent samples, the number of independent samples is replaced with the effective sample size N_eff, which is the number of independent samples with the same estimation power as the N autocorrelated samples.",
   Rhat = "R-hat is a convergence diagnostic, which compares the between- and within-chain estimates for model parameters and other univariate quantities of interest. If chains have not mixed well (ie, the between- and within-chain estimates don't agree), R-hat is larger than 1. It is recommended to run at least four chains and only using the sample if R-hat is less than 1.05.",
-  LOOIC = "https://avehtari.github.io/modelselection/CV-FAQ.html"
+  LOOIC = "https://avehtari.github.io/modelselection/CV-FAQ.html",
+  max_R = "This is the maximum Rhat across all the parameters in all the cycles for BDB and in current cycle for other borrowing methods.",
+  param_R = "This is Rhat for the selected parameter in current cycle."
 )
 
 inline <- function(ui) {

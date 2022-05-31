@@ -16,6 +16,7 @@ navbarPage('Bayesian Historical Borrowing', theme = shinytheme('flatly'),
                                  delimiters: [{left: "$", right: "$", display: false}]
                              });
                          })'),
+            #tags$script(paste0("$('[data-toggle=", '"tooltip"', "]').tooltip({container: 'body'});")),
             tags$script('$(document).ready(function(){
                   var objDiv = document.getElementById("progress");
                   // create an observer instance
@@ -56,7 +57,7 @@ navbarPage('Bayesian Historical Borrowing', theme = shinytheme('flatly'),
                         [data-tooltip]:hover:before {
                             /* needed - do not touch */
                             opacity: 1;
-                            
+                            z-index: 2;
                             /* customizable */
                             background: black;
                             margin-top: 30px;
@@ -229,11 +230,26 @@ navbarPage('Bayesian Historical Borrowing', theme = shinytheme('flatly'),
                  h4(tags$b('Model:')),
                  div(id="diagnostics_model"),
                  hr(),
-                 inline(tags$label('$max(\\hat{R}, cycle=ALL)$:')),
-                 uiOutput('rhat', class='number', inline = T),
+                 
+                 div(id="looic",
+                     inline(tags$label('$max(\\hat{R}, cycle=ALL)$')),
+                     inline(
+                         HTML(paste0("<div class='LOOIC' data-tooltip='", description['max_R'], "' data-container='body' style='display: inline; position: relative; bottom: 6px;'>  <i class='fas fa-info-circle'></i></div>"))
+                     ),
+                     inline(tags$label(':')),
+                     uiOutput('rhat', class='number', inline = T),
+                 ),
+                 
                  inline(div(selectizeInput('param', 'Parameter:', NULL, options = katex.tt))),
-                 inline(tags$label('$\\hat{R}$:')),
-                 uiOutput('rhat_param', class='number', inline = T)
+                 
+                 div(id="looic",
+                     inline(tags$label('$\\hat{R}$')),
+                     inline(
+                         HTML(paste0("<div class='LOOIC' data-tooltip='", description['param_R'], "' style='display: inline; position: relative; bottom: 6px;'>  <i class='fas fa-info-circle'></i></div>"))
+                     ),
+                     inline(tags$label(':')),
+                     uiOutput('rhat_param', class='number', inline = T)
+                 )
                  
              ),
              mainPanel(width = 8,
@@ -242,6 +258,7 @@ navbarPage('Bayesian Historical Borrowing', theme = shinytheme('flatly'),
                    tabPanel('Trace', plotOutput('trace')),
                    tabPanel('Autocorrelation', plotOutput('ac'))
                ),
+               br(),
                downloadButton("export_dens", "Export Density Plot"),
                downloadButton("export_trace", "Export Trace Plot"),
                downloadButton("export_ac", "Export Autocorrelation Plot")
@@ -259,13 +276,12 @@ navbarPage('Bayesian Historical Borrowing', theme = shinytheme('flatly'),
                 div(id="looic",
                     inline(tags$label('LOOIC')),
                     inline(
-                        HTML(paste0("<div class='LOOIC' data-tooltip='", description['LOOIC'], "' style='display: inline; position: relative; bottom: 6px;'>  <i class='fas fa-question-circle'></i></div>"))
+                        HTML(paste0("<div class='LOOIC' data-tooltip='", description['LOOIC'], "' style='display: inline; position: relative; bottom: 6px;'>  <i class='fas fa-info-circle'></i></div>"))
                     ),
                     inline(tags$label(':')),
                     uiOutput('ic', class='number', inline = T),
                     #inline(div(selectizeInput('param_cycle', 'Cycle:', NULL, options = katex.tt))),
                     br(),
-                    
                 )
                 #inline(tags$label('Cycle:')),
                 #uiOutput('cycle_selected', class='number', inline = T),
@@ -289,6 +305,6 @@ navbarPage('Bayesian Historical Borrowing', theme = shinytheme('flatly'),
         HTML('<iframe width="420" height="315" src="https://www.youtube.com/embed/tgbNymZ7vqY"></iframe>')
     ),
     tabPanel('About',
-             includeHTML("index.html")
+        includeHTML("html/index.html")
     )
 )

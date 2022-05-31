@@ -1,0 +1,98 @@
+<html>
+
+<head>
+    <title>temp</title>
+
+    <!--link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script-->
+    <style>
+        .roww::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+        .roww {
+            display: flex;
+            flex-direction: row;
+            vertical-align: middle;
+        }
+        [class*="coll-"] {
+            float: left;
+            padding: 15px;
+            margin: auto;
+        }
+        .coll-4 {width: 33.33%;}
+
+        * {
+        box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body>
+    <div style=" padding-left: 10%; padding-right: 10%;">
+        <p style='margin:0in;font-size:16px;font-family:"Calibri",sans-serif;text-align:center;'><strong><span style="font-size:15px;">About&nbsp;</span></strong><strong><span style="font-size:15px;font-family:Courier;">ShinyBHB</span></strong></p>
+
+
+        <div class="roww">
+            <div class="coll-4">
+                <img src="uwmadison.png" style="height: 100%; width: 100%;">
+            </div>
+            <div class="coll-4">
+                <img src="cb.jpg" style="">
+            </div>
+            <div class="coll-4">
+                <img src="IES.png" style="height: 100%; width: 100%;">
+            </div>
+        </div>
+
+
+
+
+        <p style='margin:0in;font-size:16px;font-family:"Calibri",sans-serif;text-align:center;'><strong><span style="font-size:15px;">&nbsp;</span></strong></p>
+        <p style='margin:0in;font-size:16px;font-family:"Calibri",sans-serif;text-align:center;'><span style="font-size:15px;">Weicong Lyu<sup>[1]</sup></span></p>
+        <p style='margin:0in;font-size:16px;font-family:"Calibri",sans-serif;text-align:center;'><span style="font-size:15px;">Shaojie Ye<sup>[1]</sup></span></p>
+        <p style='margin:0in;font-size:16px;font-family:"Calibri",sans-serif;text-align:center;'><span style="font-size:15px;">Jianshen Chen<sup>[2]</sup></span></p>
+        <p style='margin:0in;font-size:16px;font-family:"Calibri",sans-serif;text-align:center;'><span style="font-size:15px;">Sinan Yavuz<sup>[1]</sup></span></p>
+        <p style='margin:0in;font-size:16px;font-family:"Calibri",sans-serif;text-align:center;'><span style="font-size:15px;">David Kaplan<sup>[1]</sup></span></p>
+        <p style='margin:0in;font-size:16px;font-family:"Calibri",sans-serif;text-align:center;'><a href="mailto:ShinyBHB@gmail.com"><span style="font-size:15px;"><i class="fas fa-envelope"></i>&nbsp;Email us</span></a></p>
+        <p style='margin:0in;font-size:16px;font-family:"Calibri",sans-serif;text-align:center;'><span style="font-size:15px;">&nbsp;</span></p>
+        <p style='margin:0in;font-size:16px;font-family:"Calibri",sans-serif;'><strong><span style="font-size:15px;font-family:Courier;">ShinyBHB</span></strong><strong><span style="font-size:15px;">&nbsp;</span></strong><span style="font-size:15px;">is a comprehensive application package written in the&nbsp;</span><span style="font-size:15px;font-family:Courier;">R</span><strong><span style="font-size:15px;">&nbsp;</span></strong><span style="font-size:15px;">program</span><span style="font-size:15px;">&nbsp;</span><span style="font-size:15px;font-family:Courier;">Shiny</span><span style="font-size:15px;">&nbsp;to conduct Bayesian historical borrowing. Two general approaches to historical borrowing can be implemented in&nbsp;</span><span style="font-size:15px;font-family:Courier;">ShinyBHB</span><span style="font-size:15px;">: <em>static borrowing</em>, where prior strength does not automatically vary based on the similarity between the historical data and the current data, and <em>dynamic borrowing</em>, where a hyperprior is specified to indicate the researcher&rsquo;s judgement regarding the similarity between the historical data and the current data, and the heterogeneity between the historical data and the current data is accounted for by the joint prior. &nbsp;The backend program for&nbsp;</span><span style="font-size:15px;font-family:Courier;">ShinyBHB</span><span style="font-size:15px;">&nbsp;is written with&nbsp;</span><span style="font-size:15px;font-family:Courier;">Stan</span><span style="font-size:15px;">. &nbsp;</span><span style="font-size:15px;font-family:Courier;">ShinyBHB</span><span style="font-size:15px;">&nbsp;provides user-friendly and flexible features, including</span></p>
+        <p style='margin:0in;font-size:16px;font-family:"Calibri",sans-serif;'><span style="font-size:15px;">&nbsp;</span></p>
+        <p style='margin:0in;font-size:16px;font-family:"Calibri",sans-serif;'><strong><span style="font-size:15px;">Types of data structures</span></strong></p>
+        <ol style="list-style-type: decimal;">
+            <li><span style="font-size:15px;">Cross-sectional single-level or multilevel data structures.</span></li>
+            <li><span style="font-size:15px;">Longitudinal data structures (note that data must be in long format)</span></li>
+        </ol>
+        <p style='margin:0in;font-size:16px;font-family:"Calibri",sans-serif;'><span style="font-size:15px;">&nbsp;</span></p>
+        <p style='margin:0in;font-size:16px;font-family:"Calibri",sans-serif;'><strong><span style="font-size:15px;">Methods of static borrowing&nbsp;</span></strong></p>
+        <ol style="list-style-type: decimal;">
+            <li><span style="font-size:15px;">No borrowing &ndash; including Bayesian linear regression on current data using non-informative or informative priors.</span></li>
+            <li><span style="font-size:15px;">Pooling (also known as <em>Integrative Data Analysis</em>)</span></li>
+            <li><span style="font-size:15px;">Power priors &ndash; allowing the user to control the power parameter</span></li>
+            <li><span style="font-size:15px;">Bayesian synthesis using aggregated data priors.</span></li>
+        </ol>
+        <p style='margin:0in;font-size:16px;font-family:"Calibri",sans-serif;'><span style="font-size:15px;">&nbsp;</span></p>
+        <p style='margin:0in;font-size:16px;font-family:"Calibri",sans-serif;'><strong><span style="font-size:15px;">Method of dynamic borrowing</span></strong></p>
+        <ol style="list-style-type: decimal;">
+            <li><span style="font-size:15px;">Bayesian dynamic borrowing via hierarchical models</span></li>
+        </ol>
+        <p style='margin:0in;font-size:16px;font-family:"Calibri",sans-serif;'><span style="font-size:15px;">&nbsp;</span></p>
+        <p style='margin:0in;font-size:16px;font-family:"Calibri",sans-serif;'><strong><span style="font-size:15px;">Interface</span></strong></p>
+        <ol style="list-style-type: decimal;">
+            <li><span style="font-size:15px;">Flexible model building</span></li>
+            <li><span style="font-size:15px;">Computational diagnostics</span></li>
+            <li><span style="font-size:15px;">Output available in LaTeX format</span></li>
+            <li><span style="font-size:15px;">Tutorial video available</span></li>
+        </ol>
+        <p style='margin:0in;font-size:16px;font-family:"Calibri",sans-serif;'><span style="font-size:15px;">&nbsp;</span></p>
+        <p style='margin:0in;font-size:16px;font-family:"Calibri",sans-serif;'><span style="font-size:15px;">The development of&nbsp;</span><span style="font-size:15px;font-family:Courier;">ShinyBHB</span><span style="font-size:15px;">&nbsp;was supported by the Institute of Education Sciences, U.S. Department of Education, through Grant R305D190053 to The University of Wisconsin-Madison. The opinions expressed are those of the authors and do not represent the views of the Institute or the U.S. Department of Education.</span></p>
+        <p style='margin:0in;font-size:16px;font-family:"Calibri",sans-serif;'><span style="font-size:15px;">&nbsp;</span></p>
+        <p style='margin:0in;font-size:16px;font-family:"Calibri",sans-serif;'>
+            [1]UW-Madison [2]College Board
+        </p>
+        <p style='margin:0in;font-size:16px;font-family:"Calibri",sans-serif;text-align:center;'><strong><span style="font-size:15px;">Relevant Supporting Documents</span></strong></p>
+    </div>
+</body>
+
+</html>
