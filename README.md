@@ -12,7 +12,7 @@
 ![alt text](https://github.com/Bayesian-Methods-for-Education-Research/BDB_shinyApp/blob/main/figures/Server.png)
 
 ### 5) Click on the "Run App" button
-If you don't see the "Run App" button, install.packages("shiny")
+If you don't see the "Run App" button, install.packages("shiny") and restart RStudio
 ![alt text](https://github.com/Bayesian-Methods-for-Education-Research/BDB_shinyApp/blob/main/figures/RunApp.png)
 
 ### 6) It will pop up ShinyBHB
