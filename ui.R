@@ -302,7 +302,14 @@ navbarPage('Bayesian Historical Borrowing', theme = shinytheme('flatly'),
     ),
     tabPanel('Tutorial',
         #h4(tags$b('Help')),
-        HTML('<iframe width="420" height="315" src="https://https://youtu.be/5-c0qqcqUw0"></iframe>')
+        #HTML('')
+        HTML('<h1><p style="text-align:center">Tutorial Video for Single-Level Analyses</p></h1>
+        <p align="center"><iframe frameborder="0" scrolling="no" marginheight="0" marginwidth="0"width="788.54" height="443" type="text/html" src="https://www.youtube.com/embed/5-c0qqcqUw0?autoplay=0&fs=0&iv_load_policy=3&showinfo=0&rel=0&cc_load_policy=0&start=0&end=0&origin=http://youtubeembedcode.com"></iframe>
+        <h1><p style="text-align:center">Tutorial Video for Two Level Analyses</p></h1>
+        <p align="center"><iframe frameborder="0" scrolling="no" marginheight="0" marginwidth="0"width="788.54" height="443" type="text/html" src="https://www.youtube.com/embed/5-c0qqcqUw0?autoplay=0&fs=0&iv_load_policy=3&showinfo=0&rel=0&cc_load_policy=0&start=0&end=0&origin=http://youtubeembedcode.com"></iframe>
+        <h1><p style="text-align:center">Tutorial Video for Growth Curve Models</p></h1>
+        <p align="center"><iframe frameborder="0" scrolling="no" marginheight="0" marginwidth="0"width="788.54" height="443" type="text/html" src="https://www.youtube.com/embed/5-c0qqcqUw0?autoplay=0&fs=0&iv_load_policy=3&showinfo=0&rel=0&cc_load_policy=0&start=0&end=0&origin=http://youtubeembedcode.com"></iframe>
+        ')
     ),
     tabPanel('About',
         includeHTML("html/index.html")
