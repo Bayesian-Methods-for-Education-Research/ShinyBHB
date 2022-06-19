@@ -18,4 +18,4 @@ If you don't see the "Run App" button, install.packages("shiny") and restart RSt
 ### 6) It will pop up ShinyBHB
 ![alt text](https://github.com/Bayesian-Methods-for-Education-Research/BDB_shinyApp/blob/main/figures/ShinyApp.png)
 
-### 7) You will find the tutorial video for running ShinyBHB [here](https://youtube.com) and under the tutorial tab.
+### 7) You will find the tutorial video for running ShinyBHB [here](https://youtu.be/5-c0qqcqUw0) and under the tutorial tab.

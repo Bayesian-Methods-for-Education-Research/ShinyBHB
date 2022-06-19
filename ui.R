@@ -302,7 +302,7 @@ navbarPage('Bayesian Historical Borrowing', theme = shinytheme('flatly'),
     ),
     tabPanel('Tutorial',
         #h4(tags$b('Help')),
-        HTML('<iframe width="420" height="315" src="https://www.youtube.com/embed/tgbNymZ7vqY"></iframe>')
+        HTML('<iframe width="420" height="315" src="https://https://youtu.be/5-c0qqcqUw0"></iframe>')
     ),
     tabPanel('About',
         includeHTML("html/index.html")
