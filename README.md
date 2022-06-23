@@ -1,4 +1,4 @@
-# Tutorial Video can be found [here](https://youtu.be/5-c0qqcqUw0) and under the tutorial tab.
+# A tutorial video of ShinyBHB can be found [here](https://youtu.be/5-c0qqcqUw0)
 # Please follow the instructions to start ShinyBHB App
 
 ### 1) Click the green "Code" button
