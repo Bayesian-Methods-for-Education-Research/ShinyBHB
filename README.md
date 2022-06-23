@@ -1,5 +1,5 @@
-## A tutorial video of ShinyBHB can be found [here](https://youtu.be/5-c0qqcqUw0)
-## Please follow the instructions to start ShinyBHB App
+## A tutorial video of ShinyBHB can be found [here](https://youtu.be/5-c0qqcqUw0).
+## Please follow the instructions to start ShinyBHB App:
 
 ### 1) Click the green "Code" button
 ![alt text](https://github.com/Bayesian-Methods-for-Education-Research/BDB_shinyApp/blob/main/figures/Code.png)
