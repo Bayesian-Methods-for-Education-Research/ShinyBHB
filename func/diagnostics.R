@@ -1,3 +1,7 @@
+# diagnostics.R gives basic metrics and show diagnostic plots
+
+
+# print the model
 get_model <- function (div_name) {
   s_i = list(one=1, two=2, three=3)
   layer_actual = s_i[[layer()]]
@@ -254,10 +258,6 @@ observeEvent(info$var, {
   updateSelectizeInput(session, 'param', choices = info$var, selected = info$var[1], options = katex)
 })
 
-#observeEvent(info$cycle, {
-#    updateSelectizeInput(session, 'param_cycle', selected = 0,
-#                         choices = setNames(0:length(info$cycle), c('(All)', info$cycle)))
-#})
 
 output$ic <- renderUI({
   req(info$ic)
@@ -275,21 +275,6 @@ output$rhat <- renderUI({
 row <- reactiveVal()
 
 observeEvent(c(input$param), {
-  # req(input$param)
-  # var <- if (input$param == '(All)')
-  #   info$var
-  # else
-  #   # else
-  #   input$param
-  # 
-  # cycle2index = setNames(1:length(info$cycle), info$cycle)
-  # index = cycle2index[input$w1]
-  # cycle <- paste0('\\[', index, ',')
-  
-  # cycle <- if (input$param_cycle == '0')
-  #     '\\['
-  #     paste0('\\[', input$param_cycle, ',')
-  
   row(unique(do.call(c, lapply(var, function(var) {
     grep(paste(paste0('(^', input$param, '$)'), collapse = '|'), rownames(info$est), value = T)
   }))))
@@ -297,11 +282,9 @@ observeEvent(c(input$param), {
   output$rhat_param <- renderUI({
     tex(format(info$est[row(), 'Rhat'], scientific = F))
   })
-  
-  #addTooltip(session, 'rhat_param', "R-hat is a convergence diagnostic, which compares the between- and within-chain estimates for model parameters and other univariate quantities of interest. If chains have not mixed well (ie, the between- and within-chain estimates don't agree), R-hat is larger than 1. It is recommended to run at least four chains and only using the sample if R-hat is less than 1.05.", placement = "right", trigger = "hover", options = NULL)
 })
 
-
+# density plot and export
 plotDens = function(cur_row, param_name) {
   stan_dens(fit(), cur_row) + xlab(TeX(paste0("$\\", param_name, "$"))) + ylab("Density") + 
     theme(axis.text.x = element_text(size = 15), axis.text.y = element_text(size = 15))
@@ -309,9 +292,6 @@ plotDens = function(cur_row, param_name) {
 output$dens <- renderPlot({
   req(input$param)
   req(length(row()) > 0)
-  # fit_tmp <- fit()
-  # names(fit_tmp) <- paste("$\\", names(fit_tmp), "$", sep="")
-  # row_tmp <- paste("$\\", row(), "$", sep="")
   plotDens(row(), getLatex(input$param))
 })
 output$export_dens <- downloadHandler(
@@ -345,6 +325,7 @@ output$export_dens <- downloadHandler(
   contentType = "application/zip"
 )
 
+# trace plot and export
 plotTrace = function(cur_row, param_name) {
   stan_trace(fit(), cur_row) + xlab("Iteration") + ylab(TeX(paste0("$\\", param_name, "$"))) + 
     theme(text = element_text(size = 20), legend.title = element_text(size = 20), axis.text.y = element_text(size = 20))
@@ -385,6 +366,7 @@ output$export_trace <- downloadHandler(
   contentType = "application/zip"
 )
 
+# autocorrection plot and export
 plotAc = function(cur_row) {
   stan_ac(fit(), cur_row) + xlab("Lag") + ylab("Autocorrelation") +
     theme(text = element_text(size = 20), legend.title = element_text(size = 16))
@@ -424,17 +406,3 @@ output$export_ac <- downloadHandler(
   },
   contentType = "application/zip"
 )
-
-# output$export_ac <- downloadHandler(
-#   filename = function() {
-#     paste("data-", Sys.Date(), ".png", sep="")
-#   },
-#   content = function(file) {
-#     device <- function(..., width, height) {
-#       grDevices::png(..., width = width, height = height,
-#                      res = 300, units = "in")
-#     }
-#     ggsave(file, plot = plotAc(), device = device)
-#   }
-# )
-

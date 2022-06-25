@@ -1,5 +1,10 @@
+# data.R handles input and specifies the general type of data
+
+
+# default model layer is 1
 layer <- reactiveVal('one')
 
+# function that gets the parameters to change in different cases
 get_selection_params <- function() {
     params = c('z1', 'y1', 'x1')
     if (input$long) {
@@ -15,6 +20,7 @@ get_selection_params <- function() {
     return (params)
 }
 
+# exclude the selected one from other selection list once updated
 update_selections <- function() {
     var1 <- isolate(var1())
     
@@ -31,6 +37,7 @@ update_selections <- function() {
     }
 }
 
+# get input
 data1 <- eventReactive(input$path1, {
     req(input$path1)
     
@@ -43,18 +50,17 @@ data1 <- eventReactive(input$path1, {
     # load new data
     read.data(input$path1$datapath)
 })
-
 var1 <- eventReactive(data1(), {
     gsub('_', '\\\\_', colnames(data1()))
 })
 
 observe({
     tryCatch({
-        cycle <- grep(var.z, var1(), ignore.case = T) # find matching cycle description in var list and return index
+        # find matching cycle description in var list and return index
+        cycle <- grep(var.z, var1(), ignore.case = T) 
         z <- if (length(cycle) > 0) cycle[1] else 1
         y <- if (z == 1) 2 else 1
         updateSelectInput(session, 'z1', choices = var1(), selected = var1()[z])
-        #updateSelectInput(session, 'y1', choices = c(var1()[-z], c('Intercept')), selected = var1()[y])
         updateSelectInput(session, 'y1', choices = var1()[-z], selected = var1()[y])
         updateSelectInput(session, 'x1', choices = var1()[-c(z, y)], selected = NULL)
     }, error = function(e) {
@@ -81,6 +87,7 @@ observeEvent(c(input$t1, input$td1, input$id1, input$y1, input$x1, input$g2, inp
     update_selections()
 })
 
+# add 2nd layer
 observeEvent(input$add_2, {
     insertUI(
         selector = "#add_2",
@@ -138,36 +145,7 @@ observeEvent(input$add_2, {
     updateSelectInput(session, 'x2', choices = var1[!(var1 %in% c(z1, y1, x1))], selected = NULL)
 })
 
-observeEvent(input$add_3, {
-    insertUI(
-        selector = "#add_3",
-        where = "beforeBegin",
-        ui = tags$div(
-            id = "level-3",
-            h4(tags$b('Level-3')),
-            selectizeInput('g3', 'Group ID:', NULL, options = katex.tt),
-            selectizeInput('x3', 'Independent Variable:', NULL, multiple = T, options = katex.tt),
-            actionButton("delete_3", "Delete Level-3"),
-        )
-    )
-    removeUI(
-        selector = "#add_3",
-    )
-    removeUI(
-        selector = "#delete_2",
-    )
-    
-    layer('three')
-    var1 <- isolate(var1())
-    z1 <- isolate(input$z1)
-    y1 <- isolate(input$y1)
-    x1 <- isolate(input$x1)
-    x2 <- isolate(input$x2)
-    g2 <- isolate(input$g2)
-    updateSelectInput(session, 'g3', choices = var1[!(var1 %in% c(z1, y1, x1, x2, g2))], selected = NULL)
-    updateSelectInput(session, 'x3', choices = var1[!(var1 %in% c(z1, y1, x1, x2, g2))], selected = NULL)
-})
-
+# delete 2nd layer
 observeEvent(input$delete_2, {
     insertUI(
         selector = "#level-2",
@@ -199,34 +177,66 @@ observeEvent(input$delete_2, {
     updateSelectInput(session, 'x1', choices = var1[!(var1 %in% c(z1, y1))], selected = x1)
 })
 
-observeEvent(input$delete_3, {
-    insertUI(
-        selector = "#level-2",
-        where = "beforeEnd",
-        ui = actionButton("add_3", "Add Level-3"),
-    )
-    insertUI(
-        selector = "#level-2",
-        where = "beforeEnd",
-        ui = actionButton("delete_2", "Delete Level-2"),
-    )
-    updateSelectInput(session, 'g3', choices = NULL, selected = NULL)
-    updateSelectInput(session, 'x3', choices = NULL, selected = NULL)
-    removeUI(
-        selector = "#level-3",
-    )
-    
-    layer('two')
-    var1 <- isolate(var1())
-    z1 <- isolate(input$z1)
-    y1 <- isolate(input$y1)
-    x1 <- isolate(input$x1)
-    x2 <- isolate(input$x2)
-    g2 <- isolate(input$g2)
-    updateSelectInput(session, 'x1', choices = var1[!(var1 %in% c(z1, y1, x2, g2))], selected = x1)
-    updateSelectInput(session, 'x2', choices = var1[!(var1 %in% c(z1, y1, x1, g2))], selected = x2)
-})
+# # add 3rd layer, not fully implemented in our code
+# observeEvent(input$add_3, {
+#     insertUI(
+#         selector = "#add_3",
+#         where = "beforeBegin",
+#         ui = tags$div(
+#             id = "level-3",
+#             h4(tags$b('Level-3')),
+#             selectizeInput('g3', 'Group ID:', NULL, options = katex.tt),
+#             selectizeInput('x3', 'Independent Variable:', NULL, multiple = T, options = katex.tt),
+#             actionButton("delete_3", "Delete Level-3"),
+#         )
+#     )
+#     removeUI(
+#         selector = "#add_3",
+#     )
+#     removeUI(
+#         selector = "#delete_2",
+#     )
+#     
+#     layer('three')
+#     var1 <- isolate(var1())
+#     z1 <- isolate(input$z1)
+#     y1 <- isolate(input$y1)
+#     x1 <- isolate(input$x1)
+#     x2 <- isolate(input$x2)
+#     g2 <- isolate(input$g2)
+#     updateSelectInput(session, 'g3', choices = var1[!(var1 %in% c(z1, y1, x1, x2, g2))], selected = NULL)
+#     updateSelectInput(session, 'x3', choices = var1[!(var1 %in% c(z1, y1, x1, x2, g2))], selected = NULL)
+# })
+# # delete 3rd layer, not fully implemented in our code
+# observeEvent(input$delete_3, {
+#     insertUI(
+#         selector = "#level-2",
+#         where = "beforeEnd",
+#         ui = actionButton("add_3", "Add Level-3"),
+#     )
+#     insertUI(
+#         selector = "#level-2",
+#         where = "beforeEnd",
+#         ui = actionButton("delete_2", "Delete Level-2"),
+#     )
+#     updateSelectInput(session, 'g3', choices = NULL, selected = NULL)
+#     updateSelectInput(session, 'x3', choices = NULL, selected = NULL)
+#     removeUI(
+#         selector = "#level-3",
+#     )
+#     
+#     layer('two')
+#     var1 <- isolate(var1())
+#     z1 <- isolate(input$z1)
+#     y1 <- isolate(input$y1)
+#     x1 <- isolate(input$x1)
+#     x2 <- isolate(input$x2)
+#     g2 <- isolate(input$g2)
+#     updateSelectInput(session, 'x1', choices = var1[!(var1 %in% c(z1, y1, x2, g2))], selected = x1)
+#     updateSelectInput(session, 'x2', choices = var1[!(var1 %in% c(z1, y1, x1, g2))], selected = x2)
+# })
 
+# different selections for longitudinal models
 observeEvent(input$long, {
     if (input$long) {
         removeUI(

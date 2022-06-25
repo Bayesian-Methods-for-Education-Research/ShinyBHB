@@ -1,4 +1,6 @@
-# the slope of beta, another cycle selection, and maybe the subsystem for some new function
+#ui.R clarifies the basic layout of the app, including the tabs and items inside every page.
+
+
 library(shiny)
 library(shinyBS)
 
@@ -10,13 +12,11 @@ navbarPage('Bayesian Historical Borrowing', theme = shinytheme('flatly'),
             tags$link(rel = 'stylesheet', href = 'katex.min.css'),
             tags$script(defer = NA, src = 'katex.min.js'),
             tags$script(defer = NA, src = 'auto-render.min.js'),
-            #tags$script(defer = NA, src = 'fontawesome-free-6.1.1-web/js/fontawesome.js'),
             tags$script('document.addEventListener("DOMContentLoaded", function() {
                              renderMathInElement(document.body, {
                                  delimiters: [{left: "$", right: "$", display: false}]
                              });
                          })'),
-            #tags$script(paste0("$('[data-toggle=", '"tooltip"', "]').tooltip({container: 'body'});")),
             tags$script('$(document).ready(function(){
                   var objDiv = document.getElementById("progress");
                   // create an observer instance
@@ -115,7 +115,6 @@ navbarPage('Bayesian Historical Borrowing', theme = shinytheme('flatly'),
                     )
                 ),
                 selectizeInput('z1', 'Cycle Variable:', NULL, options = katex.tt),
-                #bsTooltip(id = "z1", title = "Help: reserved reserved  reserved reserved", placement = "bottom", trigger = "hover"),
                 selectizeInput('w1', 'Currect Cycle:', NULL, options = katex.tt),
                 selectizeInput('y1', 'Dependent Variable:', NULL, options = katex.tt),
                 div(id = "longitudinal_param",
@@ -125,7 +124,6 @@ navbarPage('Bayesian Historical Borrowing', theme = shinytheme('flatly'),
                     )
                 ),
                 actionButton("add_2", "Add Level-2"),
-                #selectizeInput('beta_gen', 'Beta', c("random" = "random", "fixed" = "fixed"), selected = "random"),
             ),
             mainPanel(
                 DTOutput('table1')
@@ -162,7 +160,6 @@ navbarPage('Bayesian Historical Borrowing', theme = shinytheme('flatly'),
             mainPanel(id = "estimation_panel",
                 h4(tags$b('Model:')),
                 tags$label('Level-1'),
-                #uiOutput('interactive_equ', inline = TRUE),
                 uiOutput('equ1'),
                 div(id = "head-prior", h4(tags$b('Prior Distribution:'))),
                 div(id = 'Prior'),
@@ -176,7 +173,6 @@ navbarPage('Bayesian Historical Borrowing', theme = shinytheme('flatly'),
                 uiOutput("prior_S", class = "prior"),
                 uiOutput("prior_R", class = "prior"),
                 
-                #uiOutput('prior', inline = TRUE),
                 h4(tags$b('Hyperprior: * ')),
                 div(id = 'Hyperprior'),
                 uiOutput("hyperprior_sigma_beta", class = "hyperprior"),
@@ -188,37 +184,7 @@ navbarPage('Bayesian Historical Borrowing', theme = shinytheme('flatly'),
                 uiOutput("hyperprior_tau", class = "hyperprior"),
                 uiOutput("hyperprior_Omega", class = "hyperprior"),
                 uiOutput("hyperprior_sigma_R", class = "hyperprior"),
-                #uiOutput('hyperprior', inline = TRUE),
                 
-                # span(id = 'param1', class = 'param', fluidPage(
-                #     fluidRow(
-                #         inline(selectizeInput('beta1', '$\\sigma_\\beta\\sim$', prior.beta, options = katex)),
-                #         div(style="display:inline-block", textInput(inputId="xlimitsmin", label="x-min", value = 0.0)),
-                #         div(style="display:inline-block", textInput(inputId="xlimitsmax", label="x-max", value = 0.5)),
-                #     ),
-                #     fluidRow(
-                #         bootstrapPage(
-                #             inline(selectizeInput('beta1', '$\\sigma_\\beta\\sim$', prior.beta, options = katex)),
-                #             div(style="display:inline-block",textInput(inputId="xlimitsmin", label="x-min", value = 0.0)),
-                #             div(style="display:inline-block",textInput(inputId="xlimitsmax", label="x-max", value = 0.5))
-                #         )
-                #     ),
-                #     fluidRow(
-                #         inline(selectizeInput('beta1', '$\\sigma_\\beta\\sim$', prior.beta, options = katex)),
-                #         inline(textInput('beta1max', label = 'bb', value = "10", width = 30)),
-                #         inline(textInput('beta1max', label = 'll', value = "10", width = 30)),
-                #     ),
-                #     fluidRow(
-                #         column(4, inline(selectizeInput('mu1', '$\\sigma_{0_\\beta}\\sim$', prior.mu, options = katex))),
-                #         column(2, textInput('mu1min', NULL, value = "0", width = NULL, placeholder = NULL)),
-                #         column(2, textInput('mu1max', NULL, value = "10", width = NULL, placeholder = NULL)),
-                #     ),
-                #     fluidRow(
-                #         column(4, inline(selectizeInput('R1', '$\\sigma_R\\sim$', prior.R, options = katex))),
-                #         column(2, textInput('R1min', NULL, value = "0", width = NULL, placeholder = NULL)),
-                #         column(2, textInput('R1max', NULL, value = "10", width = NULL, placeholder = NULL)),
-                #     )
-                # )),
                 helpText('* Note that data have been standardized during the computation. Hyperpriors should be specified based on standardized data, and results will be converted back to their original scale by default.'),
                 
             ),
@@ -231,7 +197,7 @@ navbarPage('Bayesian Historical Borrowing', theme = shinytheme('flatly'),
                  div(id="diagnostics_model"),
                  hr(),
                  
-                 div(id="looic",
+                 div(id="rhat_max_div",
                      inline(tags$label('$max(\\hat{R}, cycle=ALL)$')),
                      inline(
                          HTML(paste0("<div class='LOOIC' data-tooltip='", description['max_R'], "' data-container='body' style='display: inline; position: relative; bottom: 6px;'>  <i class='fas fa-info-circle'></i></div>"))
@@ -242,7 +208,7 @@ navbarPage('Bayesian Historical Borrowing', theme = shinytheme('flatly'),
                  
                  inline(div(selectizeInput('param', 'Parameter:', NULL, options = katex.tt))),
                  
-                 div(id="looic",
+                 div(id="rhat_div",
                      inline(tags$label('$\\hat{R}$')),
                      inline(
                          HTML(paste0("<div class='LOOIC' data-tooltip='", description['param_R'], "' style='display: inline; position: relative; bottom: 6px;'>  <i class='fas fa-info-circle'></i></div>"))
@@ -280,15 +246,8 @@ navbarPage('Bayesian Historical Borrowing', theme = shinytheme('flatly'),
                     ),
                     inline(tags$label(':')),
                     uiOutput('ic', class='number', inline = T),
-                    #inline(div(selectizeInput('param_cycle', 'Cycle:', NULL, options = katex.tt))),
                     br(),
                 )
-                #inline(tags$label('Cycle:')),
-                #uiOutput('cycle_selected', class='number', inline = T),
-                #br(),
-                #inline(tags$label(paste0('$max(\\hat{R}, cycle=', input$w1, ')$:'))),
-                
-                
             ),
             mainPanel(width = 8, id = "div_test",
                 tabsetPanel(

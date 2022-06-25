@@ -1,7 +1,4 @@
-# Some potential adds-on:
-# Add time period slider in longitudinal model
-# Cycle selection for historical learning
-# Flexible forms for [functional form of time V] - multi, exp, log - no idea how to implement
+# server.R includes the algorithms of BDB and other borrowing methods, and the process of taking inputs and running data.
 
 library(shiny)
 null <- character(0)
@@ -46,7 +43,6 @@ show <- function(...) {
 
 
 shinyServer(function(input, output, session) {
-    
     ## file to write progress
     tfile <- tempfile(fileext = ".txt")
     
@@ -73,7 +69,6 @@ shinyServer(function(input, output, session) {
         count <<- count + 1
         id <- paste0('katex-', count)
         tagList(
-            #div(id = id, style="display: inline-block"),
             div(id = id),
             tags$script(HTML(paste0('katex.render("', gsub('\\', '\\\\', paste0(...), fixed = T),
                                     '", document.getElementById("', id, '"), {displayMode: true});')))
@@ -92,8 +87,6 @@ shinyServer(function(input, output, session) {
             HTML(paste0("<div class='core' data-tooltip='", parallel::detectCores(), " is the number of cores your system has. We recommend specifying the number of cores to be the same as the number of chains.", "' style='display: inline;'>  <i class='fas fa-info-circle'></i></div>"))
         )
     )
-    
-    #addTooltip(session, 'hyperprior_core', "test", placement = "right", trigger = "hover", options = NULL)
     
     fit <- reactiveVal()
     info <- reactiveValues()
@@ -208,7 +201,81 @@ shinyServer(function(input, output, session) {
                     }
                 }
             }
-            runjs('document.getElementById("fit").innerHTML += "Done!\\n";')
+           else if (layer() == 'two' && input$long) {
+                info$var <- c('\\sigma_R'='sigma_r')
+                ind_cur <- 1
+                for (i in 0: (strtoi(input$tf1) + length(input$td1))) {
+                    info$var[paste0('\\delta_{', i, '00}')] = paste0('beta\\[', ind_cur, '\\]')
+                    ind_cur <- ind_cur + 1
+                    for (k in 1: length(input$x2)) {
+                        if (!exclude_2()[i + 1, 1, k]) {
+                            info$var[paste0('\\delta_{', i, '0', k, '}')] = paste0('beta\\[', ind_cur, '\\]')
+                            ind_cur <- ind_cur + 1
+                        }
+                    }
+                        
+                    for (j in 1: length(input$x1)) {
+                        if (!exclude()[i + 1, j]) {
+                            info$var[paste0('\\delta_{', i, j, '0}')] = paste0('beta\\[', ind_cur, '\\]')
+                            ind_cur <- ind_cur + 1
+                            for (k in 1: length(input$x2)) {
+                                if (!exclude_2()[i + 1, j + 1, k]) {
+                                    info$var[paste0('\\delta_{', i, j, k, '}')] = paste0('beta\\[', ind_cur, '\\]')
+                                    ind_cur <- ind_cur + 1
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                ind_cur_i <- 1
+                for (i in 0: (strtoi(input$tf1) + length(input$td1))) {
+                    if (!exclude()[i + 1, length(input$x1) + 1]) {
+                        info$var[paste0('\\text{Var}(U_{', i, 'ij})')] = paste0('Sigma_u\\[', ind_cur_i, ',', ind_cur_i, '\\]')
+                        if (i != strtoi(input$tf1) + length(input$td1)) {
+                            ind_cur_j <- ind_cur_i + 1
+                            for (j in (i + 1): (strtoi(input$tf1) + length(input$td1))) {
+                                if (!exclude()[j + 1, length(input$x1) + 1]) {
+                                    info$var[paste0('\\text{Cov}(U_{', i, 'ij},U_{', j, 'ij})')] = paste0('Sigma_u\\[', ind_cur_i, ',', ind_cur_j, '\\]')
+                                    ind_cur_j <- ind_cur_j + 1
+                                }
+                            }
+                        }
+                        
+                        ind_cur_i <- ind_cur_i + 1
+                    }
+                }
+                
+                ind_cur_i <- 1
+                for (i in 0: (strtoi(input$tf1) + length(input$td1))) {
+                    for (j in 0: length(input$x1)) {
+                        if (!exclude_2()[i + 1, j + 1, length(input$x2) + 1]) {
+                            info$var[paste0('\\text{Var}(V_{', i, j, 'j})')] = paste0('Sigma_v\\[', ind_cur_i, ',', ind_cur_i, '\\]')
+                            
+                            ind_cur_j <- ind_cur_i + 1
+                            n_i <- i
+                            n_j <- j
+                            while (TRUE) {
+                                n_j <- n_j + 1
+                                if (n_j == length(input$x1) + 1) {
+                                    n_j <- 0
+                                    n_i <- n_i + 1
+                                }
+                                if (n_i == strtoi(input$tf1) + length(input$td1) + 1) {
+                                    break
+                                }
+                                if (!exclude_2()[n_i + 1, n_j + 1, length(input$x2) + 1]) {
+                                    info$var[paste0('\\text{Cov}(V_{', i, j, 'j},V_{', n_i, n_j, 'j})')] = paste0('Sigma_v\\[', ind_cur_i, ',', ind_cur_j, '\\]')
+                                    ind_cur_j <- ind_cur_j + 1
+                                }
+                            }
+                            
+                            ind_cur_i <- ind_cur_i + 1
+                        }
+                    }
+                }
+            } 
+                      runjs('document.getElementById("fit").innerHTML += "Done!\\n";')
             updateActionButton(session, 'run', 'Run')
             enable('run')
             shinyjs::removeClass("run", "red")
@@ -230,13 +297,8 @@ shinyServer(function(input, output, session) {
         
         
         r$progress = ""
-        # stdout <- vector('character')
-        # con    <- textConnection('stdout', 'wr', local = TRUE)
-        # sink(con, type = "output")
-        # sink(con, type = "message")
         
         updateActionButton(session, 'run', 'Running')
-        print('123')
         disable('run')
         runjs('document.getElementById("fit").innerHTML = "Compiling...\\n";')
         
@@ -271,6 +333,15 @@ shinyServer(function(input, output, session) {
                 }
             }
             
+              if (component == 'nu_2') {
+                if (is.null(input[['nu_2']])) {
+                    return ("")
+                }
+                else {
+                    return (as.character(input[['nu_2']]))
+                }
+            }
+
             if (is.null(input[[paste0("dist_", component)]])) {
                 return ("")
             }
@@ -333,8 +404,6 @@ shinyServer(function(input, output, session) {
                 data.re1 <- model.matrix(as.formula(re1), data)
                 
                 re2 <- '~1'
-                #print(v3)
-                #print(exclude_2()[, , length(v3)])
                 for (i1 in seq_len(length(v1))) {
                     x1 <- v1[i1]
                     for (i2 in seq_len(length(v2))) {
@@ -463,8 +532,6 @@ shinyServer(function(input, output, session) {
                     str_replace('TAU', getExpression('tau')) %>%
                     str_replace('OMEGA', getExpression('Omega')) %>%
                     str_replace('SIGMA_R', getExpression('sigma_R'))
-                #saveRDS(dat, 'tmp.rds')
-                #writeLines(model.str, 'tmp.stan')
             }
             else {
                 data.fe <- model.matrix(~ ., data[, input$x1, drop = F])
@@ -479,17 +546,6 @@ shinyServer(function(input, output, session) {
                     str_replace('SIGMA_R', getExpression('sigma_R'))
             }
         }
-        
-        
-        #cat(model.str)
-        #saveRDS(dat, 'test.rds')
-        #cat(model.str)
-        #saveRDS(dat, 'dat.rds')
-        #writeLines(model.str, 'model.stan')
-
-        # unlink(".txt")
-        # tfile <- tempfile(fileext = ".txt")
-        
         runjs('document.getElementById("fit").innerHTML += "Sampling...\\n";')
         
         r$bg_process <- callr::r_bg(
@@ -509,6 +565,4 @@ shinyServer(function(input, output, session) {
         enable('run')
         shinyjs::addClass("run", "red")
     })
-    
-
 })

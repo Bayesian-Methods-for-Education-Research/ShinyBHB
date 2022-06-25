@@ -6,8 +6,6 @@ for (pkg in lib)
         library(pkg, character.only = T)
     }
 
-# options(warn = 1)
-
 # use LaTeX in selectizeInput
 katex <- list(render = I('{
     item: function(item, escape) {
@@ -28,18 +26,7 @@ katex.tt <- list(render = I('{
     }
 }'))
 
-# hyperprior <- list(sigma_beta = list('\\textup{Uniform}(a,b)' = 'uniform(SIGMA_BETA_A, SIGMA_BETA_B)',
-#                                      '\\textup{Half-Normal}(0, \\sigma_{\\beta_0})' = 'normal(0, SIGMA_BETA_A)',
-#                                      '\\textup{Half-Cauchy}(0,b)' = 'cauchy(0, SIGMA_BETA_A)',
-#                                      '\\textup{Half-t}(\\nu,0,\\sigma_{\\beta_0})' = 'student_t(SIGMA_BETA_A, 0, SIGMA_BETA_B)',
-#                                      '\\textup{Inv-Gamma}(s,\\nu)' = 'inv_gamma(SIGMA_BETA_A, SIGMA_BETA_B)'),
-
 var.z <- paste0('(', paste0(c('time', 'date', 'year', 'month', 'day', 'cycle'), collapse = ')|('), ')')
-# prior.beta <- list('\\textup{Normal}(\\mu_\\beta,\\sigma_\\beta^2)' = 'normal', '\\textup{Uniform}(a,b)' = 'uniform')
-
-
-
-
 
 formula <- list(
   prior_beta=list(cross=list(one=list(others="\\beta\\sim\\textup{Normal}(0,\\sigma_\\beta)",
@@ -213,22 +200,22 @@ hyperprior_formula <- list(
 )
 
 hyperprior <- list(
-  sigma_beta = list('\\textup{Uniform}(a,b)' = 'uniform', '\\textup{Half-Normal}(0, \\sigma_{\\beta_0})' = 'half_normal', '\\textup{Half-Cauchy}(0,b)' = 'cauchy', '\\textup{Half-t}(\\nu,0,\\sigma_{\\beta_0})' = 'half_t', '\\textup{Inv-Gamma}(a,b)' = 'inv_gamma'),
+  sigma_beta = list('\\textup{Half-Cauchy}(0,b)' = 'cauchy', '\\textup{Uniform}(a,b)' = 'uniform', '\\textup{Half-Normal}(0, \\sigma_{\\beta_0})' = 'half_normal', '\\textup{Half-t}(\\nu,0,\\sigma_{\\beta_0})' = 'half_t', '\\textup{Inv-Gamma}(a,b)' = 'inv_gamma'),
   sigma_beta_a = list("uniform"="a", "half_normal"="0", "cauchy"="0", "half_t"="\\nu", "inv_gamma"="a", "inv_wishart"="0", "fix_value"="0"),
   sigma_beta_b = list("uniform"="b", "half_normal"="\\sigma_{\\beta_0}", "cauchy"="b", "half_t"="\\sigma_{\\beta_0}", "inv_gamma"="b", "inv_wishart"="v", "fix_value"="\\textup{Fixed Value}"),
   sigma_0_beta = list('\\textup{Fixed Value}' = 'fix_value'),
   sigma_0_beta_a = list("uniform"="a", "half_normal"="0", "cauchy"="0", "half_t"="\\nu", "inv_gamma"="a", "inv_wishart"="0", "fix_value"="0"),
   sigma_0_beta_b = list("uniform"="b", "half_normal"="\\sigma_{0\\beta_0}", "cauchy"="b", "half_t"="\\sigma_{0\\beta_0}", "inv_gamma"="b", "inv_wishart"="v", "fix_value"="\\textup{Fixed Value}"),
-  sigma_R = list('\\textup{Uniform}(a,b)' = 'uniform', '\\textup{Half-Normal}(0, \\sigma_{R_0})' = 'half_normal', '\\textup{Half-Cauchy}(0,b)' = 'cauchy', '\\textup{Half-t}(\\nu,0,\\sigma_{R_0})' = 'half_t', '\\textup{Inv-Gamma}(a,b)' = 'inv_gamma'),
+  sigma_R = list('\\textup{Half-Cauchy}(0,b)' = 'cauchy', '\\textup{Uniform}(a,b)' = 'uniform', '\\textup{Half-Normal}(0, \\sigma_{R_0})' = 'half_normal', '\\textup{Half-t}(\\nu,0,\\sigma_{R_0})' = 'half_t', '\\textup{Inv-Gamma}(a,b)' = 'inv_gamma'),
   sigma_R_a = list("uniform"="a", "half_normal"="0", "cauchy"="0", "half_t"="\\nu", "inv_gamma"="a", "inv_wishart"="0"),
   sigma_R_b = list("uniform"="b", "half_normal"="\\sigma_{R_0}", "cauchy"="b", "half_t"="\\sigma_{R_0}", "inv_gamma"="b", "inv_wishart"="v"),
-  tau = list('\\textup{Uniform}(a,b)' = 'uniform', '\\textup{Half-Normal}(0, \\sigma_{\\tau_0})' = 'half_normal', '\\textup{Half-Cauchy}(0,b)' = 'cauchy', '\\textup{Half-t}(\\nu,0,\\sigma_{\\tau_0})' = 'half_t', '\\textup{Inv-Gamma}(a,b)' = 'inv_gamma'),
+  tau = list('\\textup{Half-Cauchy}(0,b)' = 'cauchy', '\\textup{Uniform}(a,b)' = 'uniform', '\\textup{Half-Normal}(0, \\sigma_{\\tau_0})' = 'half_normal', '\\textup{Half-t}(\\nu,0,\\sigma_{\\tau_0})' = 'half_t', '\\textup{Inv-Gamma}(a,b)' = 'inv_gamma'),
   tau_a = list("uniform"="a", "half_normal"="0", "cauchy"="0", "half_t"="\\nu", "inv_gamma"="a", "inv_wishart"="0"),
   tau_b = list("uniform"="b", "half_normal"="\\sigma_{\\tau_0}", "cauchy"="b", "half_t"="\\sigma_{\\tau_0}", "inv_gamma"="b", "inv_wishart"="v"),
   Omega = list("\\textup{LKJcorr}(\\eta)"='lkj_corr_cholesky'),
   Omega_a = list("uniform"="a", "half_normal"="0", "cauchy"="0", "half_t"="\\nu", "inv_gamma"="a", "inv_wishart"="0", "lkj_corr_cholesky"='0'),
   Omega_b = list("uniform"="b", "half_normal"="\\sigma_{R_0}", "cauchy"="b", "half_t"="\\sigma_{R_0}", "inv_gamma"="b", "inv_wishart"="v", "lkj_corr_cholesky"='\\eta'),
-  tau_2 = list('\\textup{Uniform}(a,b)' = 'uniform', '\\textup{Half-Normal}(0, \\sigma_{\\tau_0})' = 'half_normal', '\\textup{Half-Cauchy}(0,b)' = 'cauchy', '\\textup{Half-t}(\\nu,0,\\sigma_{\\tau_0})' = 'half_t', '\\textup{Inv-Gamma}(a,b)' = 'inv_gamma'),
+  tau_2 = list('\\textup{Half-Cauchy}(0,b)' = 'cauchy', '\\textup{Uniform}(a,b)' = 'uniform', '\\textup{Half-Normal}(0, \\sigma_{\\tau_0})' = 'half_normal', '\\textup{Half-t}(\\nu,0,\\sigma_{\\tau_0})' = 'half_t', '\\textup{Inv-Gamma}(a,b)' = 'inv_gamma'),
   tau_2_a = list("uniform"="a", "half_normal"="0", "cauchy"="0", "half_t"="\\nu", "inv_gamma"="a", "inv_wishart"="0"),
   tau_2_b = list("uniform"="b", "half_normal"="\\sigma_{\\tau_0}", "cauchy"="b", "half_t"="\\sigma_{\\tau_0}", "inv_gamma"="b", "inv_wishart"="v"),
   Omega_2 = list("\\textup{LKJcorr}(\\eta)"='lkj_corr_cholesky'),
@@ -237,11 +224,6 @@ hyperprior <- list(
   help_text_a = list("uniform"="lower bound", "half_normal"="", "cauchy"="", "half_t"="degree of freedom", "inv_gamma"="shape", "inv_wishart"="?", "lkjcorr"='?'),
   help_text_b = list("uniform"="upper bound", "half_normal"="standard deviation", "cauchy"="scale", "half_t"="standard deviation", "inv_gamma"="scale", "inv_wishart"="?", "lkjcorr"='?')
 )
-#prior.beta <- list('\\textup{Noninformative}' = 'non', '\\textup{Normal}(0,\\sigma^2)' = 'normal')
-#prior.sigma <- list('\\textup{Noninformative}' = 'non', '\\textup{HalfCauchy}(0,\\tau)' = 'cauchy')
-#prior.beta <- list('\\textup{Uniform}' = 'unif', '\\textup{Inv-Gamma}' = 'invgamma', '\\textup{Half-Normal}' = 'halfnorm', '\\textup{Half-Cauchy}' = 'halfcauchy')
-#prior.mu <- list('\\textup{Inv-Gamma}' = 'invgamma', '\\textup{Uniform}' = 'unif', '\\textup{Half-Normal}' = 'halfnorm', '\\textup{Half-Cauchy}' = 'halfcauchy')
-#prior.R <- list('\\textup{Uniform}' = 'unif', '\\textup{Half-Normal}' = 'halfnorm', '\\textup{Half-Cauchy}' = 'halfcauchy', '\\textup{Inv-Gamma}' = 'invgamma')
 
 description <- list(
   n_eff = "The amount by which autocorrelation within the chains increases uncertainty in estimates can be measured by effective sample size (ESS). Given independent samples, the central limit theorem bounds uncertainty in estimates based on the number of samples N. Given dependent samples, the number of independent samples is replaced with the effective sample size N_eff, which is the number of independent samples with the same estimation power as the N autocorrelated samples.",
