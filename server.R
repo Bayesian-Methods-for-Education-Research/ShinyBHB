@@ -556,6 +556,7 @@ shinyServer(function(input, output, session) {
             },
             args = list(model.str = model.str, dat = dat, chain = chain, warmup = warmup, iter = iter, core = core, thin = thin),
             stdout = tfile,
+            stderr = tfile,
             supervise = TRUE,
         )
         r$poll <- TRUE
