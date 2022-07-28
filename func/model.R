@@ -672,11 +672,11 @@ observeEvent(c(input$long, input$t1, input$td1, input$tf1, input$y1, input$x1, i
                 label = "$\\nu=$"
             }
             tagList(
-                inline(numericInput(inputId="nu", label=label, value = 1, width = "40%")),
+                inline(numericInput(inputId="nu", label=label, value = 10, width = "40%")),
                 tags$script(paste0('renderMathInElement(document.getElementById("hyperprior_nu"), {delimiters: [{left: "$", right: "$", display: false}]});')),
             )
         })
-        addTooltip(session, "hyperprior_nu", "This parameter controls the degree of borrowing and must be positive. 1 indicates weak borrowing.", placement = "left", trigger = "hover", options = NULL)
+        addTooltip(session, "hyperprior_nu", "This parameter controls the degree of borrowing and must be at least the number of random effects at level-2. Small values indicate weak borrowing.", placement = "left", trigger = "hover", options = NULL)
         observeEvent(input$nu, {
             req(input$nu)
             if (input$nu >= 0) {
@@ -703,11 +703,11 @@ observeEvent(c(input$long, input$t1, input$td1, input$tf1, input$y1, input$x1, i
     if (layer_actual >= 3 && model_mode_BDB() == 'BDB') {
         output$hyperprior_nu_2 <- renderUI({
             tagList(
-                inline(numericInput(inputId="nu_2", label="$\\nu_V=$", value = 1, width = "40%")),
+                inline(numericInput(inputId="nu_2", label="$\\nu_V=$", value = 10, width = "40%")),
                 tags$script(paste0('renderMathInElement(document.getElementById("hyperprior_nu_2"), {delimiters: [{left: "$", right: "$", display: false}]});')),
             )
         })
-        addTooltip(session, "hyperprior_nu_2", "This parameter controls the degree of borrowing and must be positive. 1 indicates weak borrowing.", placement = "left", trigger = "hover", options = NULL)
+        addTooltip(session, "hyperprior_nu_2", "This parameter controls the degree of borrowing and must be at least the number of random effects at level-3. Small values indicate weak borrowing.", placement = "left", trigger = "hover", options = NULL)
         observeEvent(input$nu_2, {
             req(input$nu_2)
             if (input$nu_2 >= 0) {

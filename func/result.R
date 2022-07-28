@@ -49,7 +49,7 @@ observeEvent(c(info$est, info$var), {
     output$rhat_cycle <- renderUI({
         rhat_cycle_max <- max(info$est[row_all(), 'Rhat'], na.rm = T)
         tagList(
-            paste0('$max(\\hat{R}, cycle=', input$w1, '):', toString(format(rhat_cycle_max, scientific = F)), '$'),
+            paste0('$\\max(\\hat{R}, \\text{cycle}=', input$w1, '):', toString(format(rhat_cycle_max, scientific = F)), '$'),
             tags$script(paste0('renderMathInElement(document.getElementById("rhat_cycle"), {delimiters: [{left: "$", right: "$", display: false}]});')),
         )
         

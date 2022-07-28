@@ -147,9 +147,9 @@ generated quantities {
   for (s in 1:SS) {
     int n = id[s];
     int m = sid[n];
-    log_lik[n] += normal_lpdf(y[s] | dot_product(x_std[, s], beta_std[cycle[sid[n]]]) +
-                                     dot_product(x1_std[, s], u_std[n]) +
-                                     dot_product(x2_std[, s], v_std[m]), sigma_r);
+    real ll = normal_lpdf(y[s] | dot_product(x_std[, s], beta_std[cycle[sid[n]]]) +
+                                 dot_product(x1_std[, s], u_std[n]) +
+                                 dot_product(x2_std[, s], v_std[m]), sigma_r);
     log_lik[n] += ll;
     log_lik_sch[m] += ll;
   }
