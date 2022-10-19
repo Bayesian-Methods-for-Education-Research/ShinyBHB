@@ -198,7 +198,7 @@ navbarPage('Bayesian Historical Borrowing', theme = shinytheme('flatly'),
                  hr(),
                  
                  div(id="rhat_max_div",
-                     inline(tags$label('$max(\\hat{R}, cycle=ALL)$')),
+                     inline(tags$label('$\\max(\\hat{R}, \\text{cycle}=\\text{ALL})$')),
                      inline(
                          HTML(paste0("<div class='LOOIC' data-tooltip='", description['max_R'], "' data-container='body' style='display: inline; position: relative; bottom: 6px;'>  <i class='fas fa-info-circle'></i></div>"))
                      ),
@@ -260,15 +260,8 @@ navbarPage('Bayesian Historical Borrowing', theme = shinytheme('flatly'),
         )
     ),
     tabPanel('Tutorial',
-        #h4(tags$b('Help')),
-        #HTML('')
-        HTML('<h1><p style="text-align:center">Tutorial Video for Single-Level Analyses</p></h1>
-        <p align="center"><iframe frameborder="0" scrolling="no" marginheight="0" marginwidth="0"width="788.54" height="443" type="text/html" src="https://www.youtube.com/embed/PbGkCS22HP8"></iframe>
-        <h1><p style="text-align:center">Tutorial Video for Two Level Analyses</p></h1>
-        <p align="center"><iframe frameborder="0" scrolling="no" marginheight="0" marginwidth="0"width="788.54" height="443" type="text/html" src=""></iframe>
-        <h1><p style="text-align:center">Tutorial Video for Growth Curve Models</p></h1>
-        <p align="center"><iframe frameborder="0" scrolling="no" marginheight="0" marginwidth="0"width="788.54" height="443" type="text/html" src=""></iframe>
-        ')
+        #HTML('<iframe width="420" height="315" src="https://www.youtube.com/embed/tgbNymZ7vqY"></iframe>')
+        includeHTML("html/tutorial.html")
     ),
     tabPanel('About',
         includeHTML("html/index.html")

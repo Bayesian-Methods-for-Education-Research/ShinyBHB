@@ -37,7 +37,7 @@ dat_table <- reactiveVal()
 
 observeEvent(c(info$est, info$var), {
     req(info$var)
-    print(info$est)
+    #print(info$est)
     param_l = c()
     for (i in seq(1,length(info$var))){
         param_l <- c(param_l, info$var[i])
@@ -57,7 +57,7 @@ observeEvent(c(info$est, info$var), {
     
     req(length(row_all()) > 0)
     dat_table_ <- info$est[row_all(), , drop = F]
-    print(dat_table_)
+    #print(dat_table_)
     rownames_new = c()
     for (i in 1 : length(rownames(dat_table_))) {
         for (print_form in names(info$var)){
@@ -69,7 +69,7 @@ observeEvent(c(info$est, info$var), {
     }
     rownames(dat_table_) = rownames_new
     dat_table_[, 9] <- round(dat_table_[, 9],0)
-    print(dat_table_)
+    #print(dat_table_)
     dat_table(dat_table_)
     
     
@@ -80,7 +80,7 @@ observeEvent(c(info$est, info$var), {
         colnames(dat_table_)[colnames(dat_table_) == "Rhat"] <- paste0('Rhat<div class="Rhat" data-tooltip="', description['Rhat'], '" style="display: inline">  <i class="fas fa-info-circle"></i></div>')
         
         rownames(dat_table_) = paste('<div id="', rownames(dat_table_), '">$\\', rownames(dat_table_), '$</div> <script>renderMathInElement(document.getElementById("', rownames(dat_table_), '"), {delimiters: [{left: "$", right: "$", display: false}]});</script>', sep='')
-        print(dat_table_)
+        #print(dat_table_)
         datatable(dat_table_, escape = FALSE, options = DToption) %>%
             formatRound(c(1:(ncol(info$est) - 2), ncol(info$est)), 3, mark = '')
     })

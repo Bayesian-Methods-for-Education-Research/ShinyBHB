@@ -201,7 +201,7 @@ shinyServer(function(input, output, session) {
                     }
                 }
             }
-           else if (layer() == 'two' && input$long) {
+            else if (layer() == 'two' && input$long) {
                 info$var <- c('\\sigma_R'='sigma_r')
                 ind_cur <- 1
                 for (i in 0: (strtoi(input$tf1) + length(input$td1))) {
@@ -274,8 +274,8 @@ shinyServer(function(input, output, session) {
                         }
                     }
                 }
-            } 
-                      runjs('document.getElementById("fit").innerHTML += "Done!\\n";')
+            }
+            runjs('document.getElementById("fit").innerHTML += "Done!\\n";')
             updateActionButton(session, 'run', 'Run')
             enable('run')
             shinyjs::removeClass("run", "red")
@@ -333,7 +333,7 @@ shinyServer(function(input, output, session) {
                 }
             }
             
-              if (component == 'nu_2') {
+            if (component == 'nu_2') {
                 if (is.null(input[['nu_2']])) {
                     return ("")
                 }
@@ -341,7 +341,7 @@ shinyServer(function(input, output, session) {
                     return (as.character(input[['nu_2']]))
                 }
             }
-
+            
             if (is.null(input[[paste0("dist_", component)]])) {
                 return ("")
             }
@@ -393,14 +393,14 @@ shinyServer(function(input, output, session) {
                         }
                     }
                 }
-                print(fe)
+                #print(fe)
                 data.fe <- model.matrix(as.formula(fe), data)
                 
                 re1 <- '~1'
                 for (i1 in 2:length(v1))
                     if (!exclude()[i1, length(v2)])
                         re1 <- paste0(re1, '+', v1[i1])
-                print(re1)
+                #print(re1)
                 data.re1 <- model.matrix(as.formula(re1), data)
                 
                 re2 <- '~1'
@@ -413,11 +413,11 @@ shinyServer(function(input, output, session) {
                             re2 <- paste0(re2, '+', paste0('I(', x1, '*', x2, ')'))
                     }
                 }
-                print(re2)
+                #print(re2)
                 data.re2 <- model.matrix(as.formula(re2), data)
                 
                 sch <- as.integer(factor(paste0(sprintf('%09d', cycle), '*** --- ***', data[[input$g2]])))
-                stu <- as.integer(factor(paste0(sprintf('%09d', cycle), '*** --- ***', data[[input$id1]], '*** --- ***', data[[input$g2]])))
+                stu <- as.integer(factor(paste0(sprintf('%09d', cycle), '*** --- ***', data[[input$g2]], '*** --- ***', data[[input$id1]])))
                 
                 cycle.sch <- (data.frame(cycle = cycle, id = sch) %>%
                                   group_by(id) %>%
@@ -458,7 +458,7 @@ shinyServer(function(input, output, session) {
                         if (!exclude()[i1 + 1, i2])
                             fe <- paste0(fe, '+I(', x1, '*', input$x2[i2], ')')
                 }
-                print(fe)
+                #print(fe)
                 data.fe <- model.matrix(as.formula(fe), data)
                 
                 re <- '~1'
@@ -503,14 +503,14 @@ shinyServer(function(input, output, session) {
                         if (!exclude()[i1 + 1, i2])
                             fe <- paste0(fe, '+I(', x1, '*', input$x1[i2], ')')
                 }
-                print(fe)
+                #print(fe)
                 data.fe <- model.matrix(as.formula(fe), data)
                 
                 re <- '~1'
                 for (i1 in seq_len(length(v1)))
                     if (!exclude()[i1 + 1, length(input$x1) + 1])
                         re <- paste0(re, '+', v1[i1])
-                print(re)
+                #print(re)
                 data.re <- model.matrix(as.formula(re), data)
                 
                 stu <- as.integer(factor(paste0(sprintf('%09d', cycle), '*** --- ***', data[[input$id1]])))
@@ -546,17 +546,18 @@ shinyServer(function(input, output, session) {
                     str_replace('SIGMA_R', getExpression('sigma_R'))
             }
         }
+        #saveRDS(model.str, 'model.rds')
+        #saveRDS(dat, 'data.rds')
+        
+        stan.model <- rstan::stan_model(model_code = model.str)
         runjs('document.getElementById("fit").innerHTML += "Sampling...\\n";')
         
         r$bg_process <- callr::r_bg(
-            func = function(model.str, dat, chain, warmup, iter, core, thin) {
-                stan.model <- rstan::stan_model(model_code = model.str)
-                
+            func = function(stan.model, dat, chain, warmup, iter, core, thin) {
                 rstan::sampling(stan.model, dat, chains = chain, warmup = warmup, iter = iter, cores = core, thin = thin)
             },
-            args = list(model.str = model.str, dat = dat, chain = chain, warmup = warmup, iter = iter, core = core, thin = thin),
+            args = list(stan.model = stan.model, dat = dat, chain = chain, warmup = warmup, iter = iter, core = core, thin = thin),
             stdout = tfile,
-            stderr = tfile,
             supervise = TRUE,
         )
         r$poll <- TRUE
