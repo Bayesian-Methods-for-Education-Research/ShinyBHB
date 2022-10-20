@@ -556,7 +556,7 @@ observeEvent(c(input$long, input$t1, input$td1, input$tf1, input$y1, input$x1, i
     
     # Update hyperpriors
     updateHyperprior <- function(component, label) {
-        if (component == "sigma_beta" & model_mode_BDB() == "others") {
+        if (component == "sigma_beta" && model_mode_BDB() == "others") {
             mapping = list('\\textup{Fixed Value}' = 'fix_value')
             default_value = 3
         }

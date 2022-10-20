@@ -548,6 +548,7 @@ shinyServer(function(input, output, session) {
         }
         #saveRDS(model.str, 'model.rds')
         #saveRDS(dat, 'data.rds')
+        #cat(model.str)
         
         stan.model <- rstan::stan_model(model_code = model.str)
         runjs('document.getElementById("fit").innerHTML += "Sampling...\\n";')
