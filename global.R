@@ -1,4 +1,4 @@
-lib <- c('shinyjs', 'shinythemes', 'DT', 'magrittr', 'tools', 'haven', 'htmltools',
+lib <- c('shinyjs', 'shinythemes', 'DT', 'magrittr', 'tools', 'haven', 'htmltools', 'ggplot2',
          'openxlsx', 'readr', 'shinyBS', 'rstan', 'loo', 'dplyr', 'stringr', 'latex2exp')
 for (pkg in lib)
     if (!require(pkg, character.only = T)) { # if the pkg is not found

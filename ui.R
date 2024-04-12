@@ -144,7 +144,7 @@ navbarPage('Bayesian Historical Borrowing', theme = shinytheme('flatly'),
                            numericInput('core', paste0('Number of cores out of ', parallel::detectCores()), min(4, parallel::detectCores()), min = 1, max = parallel::detectCores()),
                            
                            #bsTooltip('core', paste0(parallel::detectCores(), " is the number of cores your system has."), placement = "right", trigger = "hover", options = NULL),
-                           numericInput('thin', 'Thinning interval', 10, min = 1)
+                           numericInput('thin', 'Thinning interval', 1, min = 1)
                     ),
                     column(6,
                            numericInput('iter', 'Total iterations', 20000, min = 0, step = 500),
