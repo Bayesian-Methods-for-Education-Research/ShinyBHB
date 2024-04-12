@@ -115,7 +115,7 @@ navbarPage('Bayesian Historical Borrowing', theme = shinytheme('flatly'),
                     )
                 ),
                 selectizeInput('z1', 'Cycle Variable:', NULL, options = katex.tt),
-                selectizeInput('w1', 'Currect Cycle:', NULL, options = katex.tt),
+                selectizeInput('w1', 'Current Cycle:', NULL, options = katex.tt),
                 selectizeInput('y1', 'Dependent Variable:', NULL, options = katex.tt),
                 div(id = "longitudinal_param",
                     checkboxInput('long', 'Use Longitudinal Model', value = FALSE, width = NULL),
